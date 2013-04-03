@@ -6,8 +6,6 @@ var _ = require('underscore')
 
 var jquery = fs.readFileSync("./jquery-1.9.1.min.js").toString();
 
-var html = "<!doctype html><html><body><!--slide:1,2,3--><h1>Hello world!</h1></body></html>";
- 
 /* parse the html and create a dom window */
 var window = require('jsdom').jsdom(data, null, {
         // standard options:  disable loading other assets
@@ -21,6 +19,9 @@ var window = require('jsdom').jsdom(data, null, {
 
 /* apply jquery to the window */
 var $ = require('jquery').create(window);
+
+$("svg").attr('width','100%')
+$("svg").attr('height','90%')
  
 $("*").contents().filter(function(){
     return this.nodeType == 8;
