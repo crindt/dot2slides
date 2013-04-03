@@ -7,7 +7,7 @@ simple web slides.
 
 1. Create a dot file representing your slide.
 
-```dot file.dot
+```dot
 digraph G {
         A -> B;
         B -> C;
