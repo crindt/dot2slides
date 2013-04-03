@@ -1,0 +1,6 @@
+.highlight.active polygon {
+    stroke: black;
+    stroke-width: 3px;
+    fill: red;
+    fill-opacity: 0.25;
+}

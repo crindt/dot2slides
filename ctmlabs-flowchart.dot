@@ -1,0 +1,106 @@
+digraph G {
+        graph [fontsize=18 fontname="Verdana"
+               compound=true rankdir="LR" rank="same"
+               splines="line"
+               ranksep="1.5" // separate clusters by 2 inches
+               nodesep="0.3"
+               ];
+        node [shape=record fontsize=12 fontname="Verdana" width=3.0 margin="0.05,0.001"];
+        edge [weight=100];
+        
+        subgraph cluster_e {
+                graph [rankdir="TB" height=10]
+                node [style=filled];
+                rms loop actlog icad pems sigs
+                i3[style="invisible"]
+                accident wim hpms;
+                label = "External Data";
+
+                rms[label="Raw RMS Data" margin=".1,.001"];
+                loop[label="Raw Loop Data"];
+                actlog[label="TMC Activity Logs"];
+                icad[label="CHP iCad Logs"];
+                pems[label="Processed Loop Data (PeMS)"];
+                sigs[label="Inductive Signature Data"];
+                accident[label="Accident Data (TASAS)"];
+                wim[label="Weigh-in-Motion (WIM)"];
+                hpms[label="HPMS Data"];
+        }
+        
+        subgraph cluster_p {
+                
+                graph [rankdir="TB" ranksep="1.5 equally" height=10]
+                node [style=filled];
+                ramp_perf sec inc inc_delay tmc_impact sec_perf sec_time risk hdt_vmt
+                i4[style="invisible"]
+                ;
+                label = "Processed Data Products";
+                color=blue;
+                ramp_perf[label="Ramp Performance Data"];
+                sec[label="Processed Section Data"];
+                inc[label="Incident Identification"];
+                inc_delay[label="Incident Delay Estimates"];
+                tmc_impact[label="TMC Impact Estimates"];
+                sec_perf[label="Section Performance"];
+                sec_time[label="Enhanced Section Timeseries"];
+                risk[label="Relative Risk Probabilities"];
+                hdt_vmt[label="Statewide HDT VMT"];
+        }
+
+        subgraph cluster_w {
+                color=green;
+                graph [rankdir="TB"]
+                node [style=filled];
+                RMPE [comment="highlight:2"]
+                CTMSim [comment="highlight:3"]
+                TMCPE  [comment="highlight:4"]
+                i1[style="invisible"]
+                i2[style="invisible"]
+                ISPE [comment="highlight:5"]
+                ARA  [comment="highlight:6"]
+                i6[style="invisible"]
+                CalVAD  [comment="highlight:7"]
+                i5[style="invisible"]
+                label = "Web Applications"
+        }
+
+        // RMPE
+        edge[comment="slide:2"]
+        rms:e -> ramp_perf:w;
+        loop:e -> ramp_perf:w;
+        ramp_perf:e -> RMPE:w;
+
+        // CTMSim
+        edge[comment="slide:3"]
+        loop:e -> sec:w;
+        sec:e-> CTMSim:w;
+
+        // TMCPE
+        edge[comment="slide:4"]
+        inc    -> inc_delay [constraint=false];
+        actlog:e -> inc:w;
+        icad:e   -> inc:w;
+        pems:e   -> inc_delay:w;
+        inc_delay:e -> TMCPE:w;
+        inc_delay -> tmc_impact [constraint=false];
+        pems:e   -> tmc_impact:w
+        tmc_impact:e -> TMCPE:w;
+
+        // ISPE
+        edge[comment="slide:5"]
+        sigs   -> sec_perf   -> ISPE;
+
+        // ARA
+        edge[comment="slide:6"]
+        loop:e -> sec_time:w[constraint=false];
+        sec_time:e -> ARA:w;
+        accident:e -> risk:w;
+        risk:e -> ARA:w;
+        
+        // calvad
+        edge[comment="slide:7"]
+        pems:e -> hdt_vmt:w [constraint=false];
+        hdt_vmt:e -> CalVAD:w;
+        wim:e  -> hdt_vmt:w;
+        hpms:e -> hdt_vmt:w;
+}
