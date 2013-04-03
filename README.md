@@ -7,31 +7,36 @@ simple web slides.
 
 1. Create a dot file representing your slide.
 
-```dot
-digraph G {
-        A -> B;
-        B -> C;
-}
-```
+   ```dot
+   digraph G {
+           A -> B;
+           B -> C;
+   }
+   ```
 
 2. Add a comment tag to elements indicating when and how they should appear
 
-```dot
-digraph G {
-        A -> B [comment="slide:1,2,4"]
-        B -> C [comment="slide:1,3,4"]
-}
-```
+   ```dot
+   digraph G {
+           A -> B [comment="slide:1,2,4"]
+           B -> C [comment="slide:1,3,4"]
+   }
+   ```
 
 3. Process the file using dot
-```sh
-% dot file.dot -Tsvg -o file.svg
-```
+   ```sh
+   % dot file.dot -Tsvg -o file.svg
+   ```
 
 4. Process the svg using addclass.js
-```sh
-% node addclass.js file.svg > slide.html
-```
+   ```sh
+   % node addclass.js file.svg > slide.html
+   ```
+
+`slide.html` will now display a simple slideshow with a DAG from A to B to C.  
+Initially, it will show both the edges AB and BC.  When advanced to the second 
+slide (right arrow), BC will disappear.  On the third slide AB will disappear and
+BC will appear.  On the last slide, both edges will reappear.
 
 ## Background
 
